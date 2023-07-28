@@ -5,7 +5,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 let lightbox = new SimpleLightbox('.gallery a', {
-  captionDelay: 500,
+  captionDelay: 250,
   captions: true,
   captionsData: 'alt',
 });
@@ -29,9 +29,7 @@ function onSearch(e) {
   page = 1;
 
   if (!searchQuery) {
-    Notify.warning(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
+    Notify.warning('Make your choice.');
   } else {
     page = 1;
     galleryEl.innerHTML = '';
@@ -70,6 +68,7 @@ function onLoadMore() {
     .then(response => {
       renderMarkup(response);
       lightbox.refresh();
+      smoothScroll();
       const totalPages = Math.ceil(response.data.totalHits / perPage);
       if (page >= totalPages) {
         loadMoreBtnEl.classList.add('visually-hidden');
@@ -87,4 +86,14 @@ function onLoadMore() {
     .catch(error => {
       console.error(error);
     });
+}
+
+function smoothScroll() {
+  const { height: cardHeight } =
+    galleryEl.firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
