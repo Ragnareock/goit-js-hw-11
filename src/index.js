@@ -41,6 +41,13 @@ function onSearch(e) {
           Notify.failure(
             'Sorry, there are no images matching your search query. Please try again.'
           );
+        } else if (page >= Math.ceil(response.data.totalHits / perPage)) {
+          galleryEl.innerHTML = '';
+          renderMarkup(response);
+          Notify.warning(
+            "We're sorry, but you've reached the end of search results."
+          );
+          loadMoreBtnEl.classList.add('visually-hidden');
         } else {
           galleryEl.innerHTML = '';
           renderMarkup(response);
